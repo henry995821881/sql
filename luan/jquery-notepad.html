@@ -1,0 +1,85 @@
+<script type="text/javascript" src="jfe/js/jquery.min.js"></script>
+<script language="Javascript">
+	jQuery.noConflict();
+
+	function add(index) {
+
+		var aitesakiCdField = jQuery("[name='aitesakiCd']").get(index);
+		if(aitesakiCdField.value ==""){
+			alert("相手先コードを入力してください。")
+			return;
+		}
+		
+		if(!checkType2(aitesakiCdField, 0)||aitesakiCdField.value =="" ){
+			
+			alert("相手先コードを半角英数字で入力してください。");
+		     return;
+			
+		}
+		
+
+
+		if (confirm("追加してもよろしいですか。　OK/キャンセル")) {
+
+			var kensinkikanCd = jQuery("[name='kikanCd']").eq(index).val();
+			jQuery.post("<html:rewrite page='/jfeTs0212.do'/>", {
+				doInsert : "true",
+				kensinkikanCd : kensinkikanCd,
+				aitesakiCd : aitesakiCdField.value
+			}, function(data) {
+
+                      // post 服務端必須有返回值才會調用callback
+				reload();
+			}, "json");
+		}
+	}
+
+
+	function reload() {
+
+		jQuery("form").first().submit();
+
+	}
+
+//java
+	public String doInsert(){
+	
+		maitesakiService.addMaitesaki(data);
+		
+		try {
+			response.getWriter().println("{\"result\":\"ok\"}");
+		} catch (IOException e) {
+		
+			e.printStackTrace();
+		}
+		
+		
+		return null;
+		
+	
+	}
+
+
+------------------------------------------------------------------
+			jQuery.ajax({
+				url : "<html:rewrite page='/jfeTs0212.do'/>",
+				data : {
+					doUpdate : "true",
+					kensinkikanCd : kensinkikanCd,
+					aitesakiCd : aitesakiCdField.value
+				},
+                                //不必须response,只要发送成功，失败都会回调
+				complete : function(XMLHttpRequest, textStatus) {
+
+					reload();
+				}
+
+                                 // 必须response才会回调 
+                                //success : function(data) {
+
+				//	reload();
+                               // }
+				
+			});
+
+--------------------------
