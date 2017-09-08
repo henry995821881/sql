@@ -1,0 +1,42 @@
+
+视图
+create view purchase_detail 
+ as 
+ select product.name as name,product.price as price,purchase.qty as qty,product.price * purchase.qty as total_value
+ from product,purchase
+ where product.product_id=purchase.product_id;
+
+删除
+drop view if exists pruchase_detail;
+
+
+
+存储过程
+
+
+create procedure porcedureName () 
+begin 
+    select name from user; 
+end;  
+
+删除
+drop procedure if exists porcedureName ;
+
+
+
+触发器
+
+创建触发器:t_afterinsert_on_tab1
+
+作用：增加tab1表记录后自动将记录增加到tab2表中
+
+
+DROP TRIGGER IF EXISTS t_afterinsert_on_tab1;
+CREATE TRIGGER t_afterinsert_on_tab1 
+AFTER INSERT ON tab1   
+FOR EACH ROW
+BEGIN
+     insert into tab2(tab2_id) values(new.tab1_id);
+END;
+
+
