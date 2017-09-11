@@ -1,0 +1,56 @@
+
+
+1。使用left join的两个表，最好是1:1 或 1:0的关系，这样可以保证A表的记录全部显示，B表显示符合条件的记录。
+如果B表符合条件的记录不唯一，就需要检查表设计是否合理了 
+   
+ ****结论： 如果是这样的情况，查出来的数据就会比A表的数据还多。
+
+
+
+2.  
+select * from
+
+td
+  left join (
+select case_id as sup_case_id , count(*) supervise_number from 
+ td_kcdc_case_sup_info 
+ group by  case_id
+  ) sup
+ on  
+   sup.sup_case_id = td.case_id
+ where 1=1   /*不能去掉， 否则认为and 后的条件为 联合查询时的条件， 不能起过滤作用，由于left join因此td表中记录将全部查出来*/
+
+ and td.con = 'xxxx'             
+
+总结：
+1. 对于left join，不管on后面跟什么条件，左表的数据全部查出来，因此要想过滤需把条件放到where后面
+
+2. 对于inner join，满足on后面的条件表的数据才能查出，可以起到过滤作用。也可以把条件放到where后面。
+
+
+
+3.分组 having
+
+SELECT dept,MAX(salary) AS MAXIMUM,MIN(salary) AS MINIMUM  
+FROM STAFF  
+GROUP BY dept  
+HAVING AVG(salary) > 3000  
+ORDER BY dept  
+1.max(column):求最大值,对数据类型没有要求，任意数据类型都可以
+2.min(column):求最小值,对数据类型没有要求，任意数据类型都可以
+3.avg(column):返回column不为null的平均值,对数据类型有要求，只能针对number类型(数字类型)
+4.sum(column):返回column不为null的总和,对数据类型有要求，只能针对number类型(数字类型)
+5.count(column):返回column不为null的记录数,对数据类型没有要求，任意数据类型都可以
+
+
+5。 Top
+
+现在，我们希望从上面的 "Persons" 表中选取头两条记录。
+SELECT TOP 2 * FROM Persons
+
+
+现在，我们希望从上面的 "Persons" 表中选取 50% 的记录。
+我们可以使用下面的 SELECT 语句：
+SELECT TOP 50 PERCENT * FROM Persons
+
+
